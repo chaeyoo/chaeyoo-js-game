@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사칙연산 계산기</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        #result {
+            width: 180px;
+            height: 50px;
+            margin: 5px;
+            text-align: right;
+        }
+
+        #operator {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            text-align: center;
+        }
+
+        button {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <input readonly id="operator" />
+    <input readonly type="number" id="result" />
+    <div class="row">
+        <button id="num-7" class="number">7</button>
+        <button id="num-8" class="number">8</button>
+        <button id="num-9" class="number">9</button>
+        <button id="plus" class="operator">+</button>
+    </div>
+    <div class="row">
+        <button id="num-4" class="number">4</button>
+        <button id="num-5" class="number">5</button>
+        <button id="num-6" class="number">6</button>
+        <button id="minus" class="operator">-</button>
+    </div>
+    <div class="row">
+        <button id="num-1" class="number">1</button>
+        <button id="num-2" class="number">2</button>
+        <button id="num-3" class="number">3</button>
+        <button id="divide" class="operator">/</button>
+    </div>
+    <div class="row">
+        <button id="clear">C</button>
+        <button id="num-0" class="number">0</button>
+        <button id="calculate">=</button>
+        <button id="multiply" class="operator">*</button>
+    </div>
+
+    <script>
+        let numOne = '';
+        let numTwo = '';
+        let operator;
+        let result;
+
+        const $result = document.getElementById("result");
+        const $operator = document.getElementById("operator");
+
+        function saveNum() {
+            if (!operator) {
+                numOne += this.innerHTML;
+                $result.value = numOne;
+            } else {
+                numTwo += this.innerHTML;
+                $result.value = numTwo;
+            }
+
+        }
+
+        function saveOper() {
+            if (numOne) {
+                operator = this.innerHTML;
+                $operator.value = operator;
+            } else {
+                alert('숫자를 먼저 입력하세요.');
+            }
+        }
+
+        function clearAll() {
+            numOne = '';
+            numTwo = '';
+            operator = null;
+            $result.value = '';
+            $operator.value = '';
+        }
+
+        function calculate() {
+            if (operator && numTwo) {
+                switch (operator) {
+                    case '+':
+                        result = Number(numOne) + Number(numTwo);
+                        break;
+                    case '-':
+                        result = Number(numOne) - Number(numTwo);
+                        break;
+                    case '*':
+                        result = Number(numOne) * Number(numTwo);
+                        break;
+                    case '/':
+                        result = Number(numOne) / Number(numTwo);
+                        break;
+                    default:
+                        break;
+                }
+                $result.value = result;
+                $operator.value = '';
+
+                numOne = result;
+                numTwo = '';
+                operator = null;
+                result = '';
+
+            } else if (operator && !numTwo) {
+                alert('피연산자를 입력하세요.');
+
+            } else {
+                return false;
+            }
+        }
+
+        // 숫자 버튼에 이벤트 추가
+        const numbers = document.querySelectorAll(".row .number");
+        numbers.forEach((number) => {
+            number.addEventListener("click", saveNum);
+        })
+
+        // 연산자 버튼에 이벤트 추가
+        const operators = document.querySelectorAll(".row .operator");
+        operators.forEach((oper) => {
+            oper.addEventListener("click", saveOper);
+        })
+
+        // clear 버튼에 이벤트 추가
+        document.querySelector("#clear").addEventListener("click", clearAll);
+
+        // = 버튼에 이벤트 추가
+        document.querySelector("#calculate").addEventListener("click", calculate);
+        
+    </script>
+</body>
